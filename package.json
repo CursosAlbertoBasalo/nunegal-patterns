@@ -1,0 +1,44 @@
+{
+  "name": "nunegal-patterns",
+  "version": "1.22.8",
+  "description": "Design patterns and principles for TypeScript development",
+  "author": {
+    "name": "Alberto Basalo",
+    "email": "albertobasalo@hotmail.com",
+    "url": "https://twitter.com/albertobasalo"
+  },
+  "homepage": "https://github.com/LabsAdemy/nunegal-patterns#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LabsAdemy/nunegal-patterns.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LabsAdemy/nunegal-patterns/issues"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "ts-node": "ts-node",
+    "format": "prettier --write \"./**/*.{ts,json}\"",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "prerelease": "standard-version ",
+    "release": "git push --follow-tags origin main",
+    "update": "ncu -u"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "npm-check-updates": "^15.3.4",
+    "prettier": "^2.7.1",
+    "standard-version": "^9.5.0",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "typescript": "^4.7.4"
+  }
+}
