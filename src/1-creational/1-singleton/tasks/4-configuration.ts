@@ -28,10 +28,6 @@ export class ConfigurationService {
     return ConfigurationService.instance;
   }
 
-  public static getConfiguration() {
-    return ConfigurationService.instance;
-  }
-
   private load() {
     const filePath = path.resolve(__dirname, "./configuration.json");
     const fileContent = fs.readFileSync(filePath).toString();
@@ -41,7 +37,7 @@ export class ConfigurationService {
 }
 
 export class App {
-  private configurationService = ConfigurationService.getConfiguration();
+  private configurationService = new ConfigurationService();
 
   public run() {
     console.log("App running...");
