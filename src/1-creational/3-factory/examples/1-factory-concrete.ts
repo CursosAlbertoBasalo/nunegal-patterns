@@ -1,25 +1,23 @@
-interface Something {
+export interface Something {
   someProperty: string;
   someMethod(param: string): string;
 }
 
-class ConcreteA implements Something {
+export class ConcreteA implements Something {
   public someProperty = "A";
-
   public someMethod(param: string): string {
     return param;
   }
 }
 
-class ConcreteB implements Something {
+export class ConcreteB implements Something {
   public someProperty = "B";
-
   public someMethod(param: string): string {
     return param.toLocaleLowerCase();
   }
 }
 
-class Factory {
+export class Factory {
   public create(type: string): Something {
     if (type === "A") {
       return new ConcreteA();
@@ -29,12 +27,15 @@ class Factory {
   }
 }
 
-class Client {
+export class Client {
   public doStuff(): void {
     const factory = new Factory();
-    const something = factory.create("B");
-    console.log(something.someProperty);
+    const instanceA = factory.create("A");
+    console.log("🅰️ Some property", instanceA.someProperty);
+    console.log("🅰️ Some method", instanceA.someMethod("Hello"));
+    const instanceB = factory.create("B");
+    console.log("🅱️ Some property", instanceB.someProperty);
+    console.log("🅱️ Some method", instanceB.someMethod("Goodbye"));
   }
 }
-
 new Client().doStuff();

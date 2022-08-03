@@ -1,47 +1,43 @@
-export interface ISomething {
+export interface Something {
   someProperty: string;
   someMethod(x: string): string;
 }
 
-export interface IAnything {
+export interface Anything {
   anythingProperty: string;
   anythingMethod(x: string): string;
 }
 
-class ConcreteSomethingA implements ISomething {
+class ConcreteSomethingA implements Something {
   public someProperty = "🟩 A";
   public someMethod(param: string): string {
     return param.toUpperCase();
   }
 }
 
-class ConcreteSomethingB implements ISomething {
+class ConcreteSomethingB implements Something {
   public someProperty = "🟦 B";
   public someMethod(param: string): string {
     return param;
   }
 }
 
-class ConcreteAnythingA implements IAnything {
+class ConcreteAnythingA implements Anything {
   public anythingProperty = "🟢 A";
   public anythingMethod(param: string): string {
     return param;
   }
 }
 
-class ConcreteAnythingB implements IAnything {
+class ConcreteAnythingB implements Anything {
   public anythingProperty = "🔵 B";
   public anythingMethod(param: string): string {
     return param.toLocaleLowerCase();
   }
 }
 
-interface IFactory {
-  create(param: string): unknown;
-}
-
-class SomethingFactory implements IFactory {
-  public create(type: string): ISomething {
+class SomethingFactory {
+  public create(type: string): Something {
     if (type === "A") {
       return new ConcreteSomethingA();
     } else {
@@ -50,8 +46,8 @@ class SomethingFactory implements IFactory {
   }
 }
 
-class AnythingFactory implements IFactory {
-  public create(type: string): IAnything {
+class AnythingFactory {
+  public create(type: string): Anything {
     if (type === "A") {
       return new ConcreteAnythingA();
     } else {
@@ -61,32 +57,23 @@ class AnythingFactory implements IFactory {
 }
 
 class Factory {
-  public create(type: string, subType: string): unknown {
-    let factory: IFactory;
+  public create(type: string, subType: string): Something | Anything {
     if (type === "Something") {
-      factory = new SomethingFactory();
+      return new SomethingFactory().create(subType);
     } else {
-      factory = new AnythingFactory();
+      return new AnythingFactory().create(subType);
     }
-    return factory.create(subType);
   }
-  // public create2(product: string): ISomething | IAnything {
-  //   if (type === "Something") {
-  //     return new SomethingFactory().create(product);
-  //   } else {
-  //     return new AnythingFactory().create(product);
-  //   }
-  // }
 }
 
 class Client {
   public doStuff(): void {
     const factory = new Factory();
 
-    const instanceA = factory.create("Something", "A") as ISomething;
+    const instanceA = factory.create("Something", "A") as Something;
     console.log("🅰️ Some property", instanceA.someProperty);
     console.log("🅰️ Some method", instanceA.someMethod("Hello"));
-    const instanceB = factory.create("Anything", "B") as IAnything;
+    const instanceB = factory.create("Anything", "B") as Anything;
     console.log("🅱️ Any property", instanceB.anythingProperty);
     console.log("🅱️ Any method", instanceB.anythingMethod("Goodbye"));
   }
