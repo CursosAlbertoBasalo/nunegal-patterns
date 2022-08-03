@@ -38,40 +38,48 @@ class SimpleFormatter implements Formatter {
   }
 }
 
-class LoggerWriterFactory {
-  public static createWriter(type: "console" | "textFile"): Writer {
-    if (type === "console") {
-      return new ConsoleWriter();
-    } else {
-      return new TextFileWriter();
-    }
-  }
-}
-
-class LoggerFormatterFactory {
-  public static createFormatter(type: "json" | "simple"): Formatter {
-    if (type === "json") {
-      return new JsonFormatter();
-    } else {
-      return new SimpleFormatter();
-    }
-  }
-}
-
 class Logger {
-  constructor(private readonly writer: Writer, private readonly formatter: Formatter) {}
+  public writer: Writer | undefined;
+  public formatter: Formatter | undefined;
 
   log(entry: LogEntry) {
+    if (!this.writer || !this.formatter) {
+      throw new Error("Logger is not configured");
+    }
     this.writer.write(this.formatter.format(entry));
+  }
+}
+
+class LoggerBuilder {
+  private logger: Logger = new Logger();
+  public setWriter(writer: Writer): LoggerBuilder {
+    this.logger.writer = writer;
+    return this;
+  }
+  public setFormatter(formatter: Formatter): LoggerBuilder {
+    this.logger.formatter = formatter;
+    return this;
+  }
+  public build(): Logger {
+    return this.logger;
+  }
+}
+
+class LoggerDirector {
+  public static buildDefault(): Logger {
+    const builder = new LoggerBuilder();
+    return builder.setFormatter(new SimpleFormatter()).setWriter(new ConsoleWriter()).build();
+  }
+  public static buildFancy(): Logger {
+    const builder = new LoggerBuilder();
+    return builder.setFormatter(new JsonFormatter()).setWriter(new TextFileWriter()).build();
   }
 }
 
 class Client {
   private readonly logger: Logger;
   constructor() {
-    const writer = LoggerWriterFactory.createWriter("textFile");
-    const formatter = LoggerFormatterFactory.createFormatter("json");
-    this.logger = new Logger(writer, formatter);
+    this.logger = LoggerDirector.buildDefault();
   }
   log(entry: LogEntry) {
     this.logger.log(entry);
