@@ -12,15 +12,16 @@ export class Singleton {
   }
 }
 
-export class ClientA {
+class ClientA {
   public static main(): void {
     const instance = Singleton.getInstance();
     console.log(instance.timestamp);
   }
 }
+
 ClientA.main();
 
-export class ClientB {
+class ClientB {
   public doStuff(): void {
     const instance = Singleton.getInstance();
     console.log(instance.timestamp);
@@ -28,6 +29,5 @@ export class ClientB {
     console.log(instance2.timestamp);
   }
 }
-
 new ClientB().doStuff();
 new ClientB().doStuff();
