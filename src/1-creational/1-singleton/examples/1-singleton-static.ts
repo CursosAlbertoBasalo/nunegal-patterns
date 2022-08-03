@@ -1,14 +1,20 @@
 export class Singleton {
-  private static instance: Singleton;
-  public readonly timestamp: number = Date.now();
+  private static instance: Singleton | null;
+  public readonly timestamp: number;
 
-  private constructor() {}
+  private constructor() {
+    this.timestamp = Date.now();
+  }
 
   public static getInstance(): Singleton {
     if (!Singleton.instance) {
       Singleton.instance = new Singleton();
     }
     return Singleton.instance;
+  }
+
+  public static reset(): void {
+    Singleton.instance = null;
   }
 }
 
