@@ -1,3 +1,5 @@
+import { CommonEvent, CommonEventService } from "./common-event.library";
+
 type LogCategory = "info" | "error" | "debug";
 type LogEntry = {
   category: LogCategory;
@@ -23,6 +25,29 @@ class JsonFormatter implements Formatter {
   }
 }
 
+class CommonEventFormatAdapter implements Formatter {
+  private readonly commonEventService: CommonEventService = new CommonEventService();
+
+  public format(entry: LogEntry): string {
+    const commonEvent = this.adaptLogEntryToCommonEvent(entry);
+    const commonEventMessage = this.commonEventService.createMessage(commonEvent);
+    const logMessage = this.adaptCommonEventToLogMessage(commonEventMessage);
+    return logMessage;
+  }
+
+  private adaptLogEntryToCommonEvent(entry: LogEntry): CommonEvent {
+    return {
+      date: entry.timestamp,
+      host: "localhost",
+      device: "myApp",
+      severity: entry.category === "info" ? 0 : 1,
+      extension: [`msg=${entry.message}`],
+    };
+  }
+  private adaptCommonEventToLogMessage(eventMessage: string[]): string {
+    return eventMessage.join("\n");
+  }
+}
 class Logger {
   constructor(private readonly formatter: Formatter, private readonly writer: Writer) {}
 
@@ -31,11 +56,19 @@ class Logger {
   }
 }
 
-class Client {
-  private logger = new Logger(new JsonFormatter(), new ConsoleWriter());
-  public log(entry: LogEntry) {
-    this.logger.log(entry);
+export class Client {
+  private readonly logger: Logger;
+  constructor() {
+    this.logger = new Logger(new CommonEventFormatAdapter(), new ConsoleWriter());
+  }
+  public doThings() {
+    this.logger.log({
+      category: "info",
+      message: "Hello World",
+      timestamp: new Date(),
+    });
   }
 }
+
 const client = new Client();
-client.log({ category: "info", message: "Hello world", timestamp: new Date() });
+client.doThings();
