@@ -1,5 +1,7 @@
 # Builder
 
+> simplifies or drives the creation of complex objects
+
 ## Links
 
 - https://sbcode.net/typescript/builder/
