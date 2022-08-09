@@ -12,11 +12,11 @@ export class Component implements Things {
 
 export class Decorator implements Things {
   public get property(): string {
-    return this.component.property;
+    return this.replaceSpacesWithUnderscores(this.component.property);
   }
 
   public set property(value: string) {
-    this.component.property = this.replaceSpacesWithUnderscores(value);
+    this.component.property = value;
   }
   constructor(private readonly component: Things) {}
 
