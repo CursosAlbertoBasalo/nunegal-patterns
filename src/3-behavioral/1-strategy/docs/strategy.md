@@ -13,11 +13,11 @@
 
 ```bash
 # Examples
-npm run 4-1-0
-npm run 4-1-1
+npm run 3-1-1
 # Tasks
-npm run 4-1-2
-npm run 4-1-3
+npm run 3-1-2
+npm run 3-1-3
+npm run 3-1-4
 ```
 
 ## Tasks
