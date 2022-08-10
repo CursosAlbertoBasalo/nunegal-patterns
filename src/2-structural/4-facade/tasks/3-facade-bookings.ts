@@ -25,7 +25,7 @@ export class Notifier {
   }
 }
 
-export class AgencyFacade {
+export class AgencyFacade implements Agency {
   public createBooking(trip: string): string {
     const bookings = new Bookings();
     const tripPrice = bookings.getPrice(trip);
@@ -48,8 +48,13 @@ export class AgencyFacade {
   }
 }
 
+interface Agency {
+  createBooking(trip: string): string;
+  cancelBooking(trip: string): string;
+}
+
 export class Client {
-  private agency: AgencyFacade = new AgencyFacade();
+  private agency: Agency = new AgencyFacade();
 
   public createBooking(trip: string): string {
     return this.agency.createBooking(trip);
