@@ -1,3 +1,5 @@
+import { Observer } from "./observer-logger";
+
 type BookingStatus = "Pending" | "Confirmed" | "Cancelled" | "";
 export class Booking {
   // eslint-disable-next-line max-params
@@ -34,5 +36,39 @@ export class Agency {
       booking.createdAt,
       new Date()
     );
+  }
+}
+
+export interface Observable {
+  subscribe(observer: Observer): void;
+  notifyObservers(businessEvent: string, message: string): void;
+}
+
+export class AgencySubject implements Observable {
+  private observers: Observer[] = [];
+  constructor(private agency: Agency) {}
+  public subscribe(observer: Observer): void {
+    this.observers.push(observer);
+  }
+  public notifyObservers(businessEvent: string, message: string): void {
+    this.observers.forEach(obs => obs.notify(businessEvent, message));
+  }
+  public createBooking(trip: string, price: number): Booking | undefined {
+    try {
+      const result = this.agency.createBooking(trip, price);
+      this.notifyObservers("booking-created", JSON.stringify(result));
+      return result;
+    } catch (error) {
+      this.notifyObservers("exception", (error as Error).message);
+    }
+  }
+  public cancelBooking(booking: Booking): Booking | undefined {
+    try {
+      const result = this.agency.cancelBooking(booking);
+      this.notifyObservers("booking-cancelled", JSON.stringify(result));
+      return result;
+    } catch (error) {
+      this.notifyObservers("exception", (error as Error).message);
+    }
   }
 }

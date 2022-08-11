@@ -9,3 +9,19 @@ export class Logger {
     console.log(JSON.stringify(entry));
   }
 }
+export interface Observer {
+  notify(businessEvent: string, message: string): void;
+}
+
+export class LoggerObserver implements Observer {
+  private logger: Logger = new Logger();
+
+  notify(businessEvent: string, message: string): void {
+    const entry: LogEntry = {
+      category: businessEvent === "exception" ? "error" : "info",
+      message: message,
+      timestamp: new Date(),
+    };
+    this.logger.log(entry);
+  }
+}
