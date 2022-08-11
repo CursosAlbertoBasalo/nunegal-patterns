@@ -1,9 +1,4 @@
 export abstract class BusinessTemplate {
-  protected abstract doPaymentTransaction(payload: string): string;
-  protected abstract performBusinessAction(payload: string): string;
-  protected sendNotification(payload = ""): void {
-    console.log("✅ Done " + payload);
-  }
   public execute(payload: string): string {
     console.log("ℹ️  starting business action");
     let businessResult = "";
@@ -13,6 +8,14 @@ export abstract class BusinessTemplate {
       console.log("ℹ️ 😵‍💫 error: " + error);
     }
     return businessResult;
+  }
+
+  protected abstract doPaymentTransaction(payload: string): string;
+
+  protected abstract performBusinessAction(payload: string): string;
+
+  protected sendNotification(payload = ""): void {
+    console.log("✅ Done " + payload);
   }
 
   private doMainLogic(payload: string): string {
